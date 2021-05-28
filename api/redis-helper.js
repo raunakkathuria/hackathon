@@ -26,7 +26,7 @@ client.xgroup("CREATE", STREAMS_KEY, APPLICATION_ID, '$', 'MKSTREAM' , function(
 
 function push(request) {
     // push on redis
-    client.xadd(STREAMS_KEY, request);
+    client.xadd(STREAMS_KEY, "*", request);
     return 1;
 }
 
