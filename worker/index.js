@@ -1,30 +1,26 @@
-var api_wrapper = require('./apiWrapper');
+var api = require('./apiWrapper');
 
 const redis = require("redis");
-
+const { promisify } = require("util");
 
 class Worker {
     constructor(redis_url, stream_name) {
-      this.redis_url = redis_url;
+      this.redis = redis.createClient();
       this.stream_name = stream_name;
+      this.api = new api_wrapper.ApiWrapper();
     }
-    init () {
-        this.redis = redis.createClient(this.redis_url);
-        // create consumer group
-        this.redis.xgroup('CREATE', this.stream_name, 'worker', '$', function (err) {
-            if (err) {
-                return console.error(err);
-            }
-        });
+    async init () {
+        let afunc = promisify(this.redis.xgroup).bind(this.redis);
+        await afunc('CREATE', 'test', 'worker', '$', 'MKSTREAM');
     }
     async run(){
-//         //init connection
-          var api_wrapper2 = new api_wrapper.ApiWrapper();
+        //init connection
+        await this.init()
         while (true) {
 //             // read item
 //             //process item
 //             //ack message
-                let id = await api_wrapper2.createResource({
+                let id = await process_data({
                     title: 'foo2',
                     body: 'bar2',
                     userId: 1000,
@@ -37,14 +33,19 @@ class Worker {
         //xread group
     }
 
-    ack_item() {
+    ack_item(msg_id) {
         //msg ack
     } 
+    
+    async process_data(data) {
+        return await this.api.createResource();
+    }
 
 
 }
 
-let worker = new Worker('test', 'test');
+const REDIS_URL = process.env.REDIS_URL;
+const STREAM_NAME = process.env.SERVICE_NAMESPACE;
+
+let worker = new Worker(REDIS_URL, STREAM_NAME);
 worker.run();
-
-
