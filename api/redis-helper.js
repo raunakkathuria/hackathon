@@ -4,14 +4,17 @@ const { promisify }  = require("util");
 const client         = redis.createClient(process.env.REDIS_URL);
 const STREAMS_KEY    = process.env.SERVICE_NAMESPACE;
 const APPLICATION_ID = "iot_application:node_1";
+
+
 client.monitor(function(err, res) {
     console.log("Entering monitoring mode.");
 });
 
 // create the group
-client.xgroup("CREATE", STREAMS_KEY, APPLICATION_ID, '$', 'MKSTREAM' , function(err) {
+let afunc = promisify(redis.xgroup).bind(redis);
+afunc ("CREATE", STREAMS_KEY, APPLICATION_ID, '$', 'MKSTREAM' , function(err) {
     if (err) {
-        if (err.code == 'BUSYGROUP' ) {
+        if (err.code === 'BUSYGROUP' ) {
             console.log(`Group ${APPLICATION_ID} already exists`);
         } else {
             console.log(err);
