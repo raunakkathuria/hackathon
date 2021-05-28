@@ -1,6 +1,7 @@
 const createError = (errorMessage, errorCode) => ({
     error: {
         message: errorMessage,
+        ...(errorCode ? { code: errorCode } : {}),
     },
 });
 

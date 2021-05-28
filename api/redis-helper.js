@@ -11,7 +11,7 @@ client.monitor(function(err, res) {
 });
 
 // create the group
-let afunc = promisify(redis.xgroup).bind(redis);
+let afunc = promisify(client.xgroup).bind(client);
 afunc ("CREATE", STREAMS_KEY, APPLICATION_ID, '$', 'MKSTREAM' , function(err) {
     if (err) {
         if (err.code === 'BUSYGROUP' ) {
@@ -23,7 +23,7 @@ afunc ("CREATE", STREAMS_KEY, APPLICATION_ID, '$', 'MKSTREAM' , function(err) {
     }
 });
 
-function push(request) {
+afunc push(request) {
     // push on redis
     client.xadd(STREAMS_KEY, "*", request);
     return 1;
