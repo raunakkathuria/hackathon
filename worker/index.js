@@ -28,7 +28,7 @@ class Worker {
         //xread group
     }
 
-    ack_item() {
+    ack_item(msg_id) {
         //msg ack
     } 
 
