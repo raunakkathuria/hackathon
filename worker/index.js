@@ -1,11 +1,14 @@
+var api = require('./apiWrapper');
+
 const redis = require("redis");
 const { promisify } = require("util");
 
 class Worker {
-    constructor(redis_url, stream_name) {
+    constructor(redis_url, stream_name, gorup_name = 'worker') {
       this.redis = redis.createClient(redis_url);
       this.stream_name = stream_name;
-      this.group = "worker"
+      this.api = new api.ApiWrapper();
+      this.group = gorup_name;
     }
     async init () {
         let afunc = promisify(this.redis.xgroup).bind(this.redis);
@@ -23,9 +26,16 @@ class Worker {
         //init connection
         await this.init()
         while (true) {
-            // read item
-            //process item
-            //ack message
+//             // read item
+//             //process item
+//             //ack message
+            let obj_data = {
+                    title: 'foo2',
+                    body: 'bar2',
+                    userId: 1000,
+                  };
+                await this.process_item(obj_data);
+                  console.log(id)
         } 
     } 
 
@@ -42,9 +52,18 @@ class Worker {
         // );
     }
 
-    ack_item(msg_id) {
-        //msg ack
+    async ack_item(msg_id) {
+        let afunc = promisify(this.redis.xack).bind(this.redis);
+        try {
+            await afunc(this.stream_name, this.group, msg_id);
+        } catch (err) {
+            console.log(err);
+        }
     } 
+    
+    async process_item(data) {
+         let id = await this.api.createResource();
+    }
 
 
 }

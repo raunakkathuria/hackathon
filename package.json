@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/raunakkathuria/hackathon#readme",
   "dependencies": {
+    "axios": "^0.21.1",
     "redis": "^3.1.2"
   }
 }
