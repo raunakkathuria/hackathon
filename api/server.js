@@ -1,5 +1,6 @@
-const http   = require('http');
-const config = require('./config');
+const http        = require('http');
+const config      = require('./config');
+const createError = require('./error').createError;
 
 const port = process.env.PORT || config.SERVER.PORT;
 
@@ -13,11 +14,7 @@ const server = http.createServer((req, res) => {
     const routeConfig = config.SERVER.ROUTE_METHODS[pathname];
     if (!routeConfig?.methods.includes(method)) {
         res.statusCode = 400;
-        response = {
-            error: {
-                message: `The path ${pathname} does not accept the method ${method}.`,
-            },
-        };
+        response = createError(`The path ${pathname} does not accept the method ${method}.`);
     } else {
         res.statusCode = 200;
         response = routeConfig.handler(req);

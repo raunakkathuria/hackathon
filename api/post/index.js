@@ -1,3 +1,4 @@
+const createError = require('../error').createError;
 const redisClient = require('../redis-helper');
 
 const validatePost = (req) => {
