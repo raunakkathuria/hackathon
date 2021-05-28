@@ -8,12 +8,12 @@ class Worker {
     }
     async init () {
         let afunc = promisify(this.redis.xgroup).bind(this.redis);
-        // try {
+        try {
             await afunc('CREATE', this.stream_name, 'worker', '$', 'MKSTREAM');
-        // } catch  (err) {
-        //     console.log(err)
-        //     throw err;
-        // }
+        } catch  (err) {
+            console.log(err)
+            throw err;
+        }
     }
     async run(){
         //init connection
