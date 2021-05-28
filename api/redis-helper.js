@@ -2,7 +2,7 @@
 const redis = require('redis');
 const {promisify} = require('util');
 const client = redis.createClient(process.env.REDIS_URL);
-const STREAMS_KEY = process.env.S ;
+const STREAMS_KEY = process.env.SERVICE_NAMESPACE;
 const APPLICATION_ID = "iot_application:node_1";
 var CONSUMER_ID = "WORKER";
 
@@ -23,8 +23,10 @@ client.xgroup("CREATE", STREAMS_KEY, APPLICATION_ID, '$', 'MKSTREAM' , function(
 });
 
 
+
 function push(request) {
     // push on redis
+    client.xadd(STREAMS_KEY, request);
     return 1;
 }
 
