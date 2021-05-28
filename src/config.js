@@ -1,7 +1,9 @@
 const config = {
-    SERVER_PORT         : 3000,
-    SEREVR_METHOD_ROUTES: {
-        POST: '/post',
+    SERVER: {
+        PORT         : 3000,
+        ROUTE_METHODS: {
+            '/post': ['POST'],
+        },
     },
 };
 
