@@ -4,7 +4,7 @@ const createError = require('./error').createError;
 
 const port = process.env.PORT || config.SERVER.PORT;
 
-const server = http.createServer((req, res) => {
+const server = http.createServer(async (req, res) => {
     res.setHeader('Content-Type', 'application/json');
 
     const { method, url } = req;
@@ -16,7 +16,7 @@ const server = http.createServer((req, res) => {
         res.statusCode = 400;
         response = createError(`The path ${pathname} does not accept the method ${method}.`);
     } else {
-        response = routeConfig.handler(JSON.parse(req.data));
+        response = await routeConfig.handler(JSON.parse(req.data));
         res.statusCode = response.error ? 400: 200;
     }
 

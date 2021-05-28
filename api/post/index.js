@@ -7,13 +7,14 @@ const validatePost = (postInfo) => {
     }
 };
 
-const createPost = (postInfo) => {
+const createPost = async (postInfo) => {
     const error = validatePost(postInfo);
     if (error) {
         return error;
     }
 
-    return redisClient.push(postInfo);
+    const result = await redisClient.push(postInfo);
+    return result;
 };
 
 module.exports = {

@@ -11,8 +11,8 @@ client.monitor(function(err, res) {
 });
 
 // create the group
-let afunc = promisify(client.xgroup).bind(client);
-afunc ("CREATE", STREAMS_KEY, APPLICATION_ID, '$', 'MKSTREAM' , function(err) {
+const xgroup = promisify(client.xgroup).bind(client);
+await xgroup ("CREATE", STREAMS_KEY, APPLICATION_ID, '$', 'MKSTREAM' , function(err) {
     if (err) {
         if (err.code === 'BUSYGROUP' ) {
             console.log(`Group ${APPLICATION_ID} already exists`);
@@ -23,9 +23,10 @@ afunc ("CREATE", STREAMS_KEY, APPLICATION_ID, '$', 'MKSTREAM' , function(err) {
     }
 });
 
-afunc push(request) {
+async function push(request) {
     // push on redis
-    client.xadd(STREAMS_KEY, "*", request);
+    const xadd = promisify(client.xadd).bind(client);
+    await xadd (STREAMS_KEY, "*", request);
     return 1;
 }
 
