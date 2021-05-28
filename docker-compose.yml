@@ -1,19 +1,48 @@
-redis:
-  image: redis
-  container_name: cache
-  expose:
-    - 6379
-app:
-  build: ./
-  volumes:
-    - ./:/var/www/app
-  links:
-    - redis
-  ports:
-    - 3000:3000
-  environment:
-    - REDIS_URL=redis://cache
-    - NODE_ENV=development
-    - PORT=3000
-  command:
-    sh -c 'npm i && node index.js'
+version: "3.9"
+
+services:
+  redis:
+    image: redis
+    container_name: cache
+    expose:
+      - 6379
+    networks:
+      - hackathon
+    volumes:
+      - cache-data:/data
+
+  app:
+    build: ./
+    container_name: api
+    volumes:
+      - ./:/var/www/app
+    ports:
+      - 3000:3000
+    environment:
+      - REDIS_URL=redis://cache
+      - SERVICE_NAMESPACE=deriv::hackathon
+      - NODE_ENV=development
+      - PORT=3000
+    networks:
+      - hackathon
+    command:
+      sh -c 'npm i && node ./api/index.js'
+
+  worker:
+    build: ./
+    container_name: worker
+    volumes:
+      - ./:/var/www/app
+    environment:
+      - REDIS_URL=redis://cache
+      - SERVICE_NAMESPACE=deriv::hackathon
+      - NODE_ENV=development
+    networks:
+      - hackathon
+    command:
+      sh -c 'npm i && node ./worker/index.js'
+
+volumes:
+  cache-data:
+networks:
+  hackathon:

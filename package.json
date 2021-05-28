@@ -4,7 +4,7 @@
   "description": "Hackathon",
   "main": "index.js",
   "scripts": {
-    "start": "node worker/index.js",
+    "worker": "node worker/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -16,5 +16,9 @@
   "bugs": {
     "url": "https://github.com/raunakkathuria/hackathon/issues"
   },
-  "homepage": "https://github.com/raunakkathuria/hackathon#readme"
+  "homepage": "https://github.com/raunakkathuria/hackathon#readme",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "redis": "^3.1.2"
+  }
 }
