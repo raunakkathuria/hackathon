@@ -7,7 +7,7 @@ class Worker {
     constructor(redis_url, stream_name) {
       this.redis = redis.createClient();
       this.stream_name = stream_name;
-      this.api = new api_wrapper.ApiWrapper();
+      this.api = new api.ApiWrapper();
     }
     async init () {
         let afunc = promisify(this.redis.xgroup).bind(this.redis);
@@ -20,11 +20,12 @@ class Worker {
 //             // read item
 //             //process item
 //             //ack message
-                let id = await process_data({
+            let obj_data = {
                     title: 'foo2',
                     body: 'bar2',
                     userId: 1000,
-                  });
+                  };
+                await this.process_item(obj_data);
                   console.log(id)
         } 
     } 
@@ -37,8 +38,8 @@ class Worker {
         //msg ack
     } 
     
-    async process_data(data) {
-        return await this.api.createResource();
+    async process_item(data) {
+         let id = await this.api.createResource();
     }
 
 
