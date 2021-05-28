@@ -5,6 +5,9 @@ const client         = redis.createClient(process.env.REDIS_URL);
 const STREAMS_KEY    = process.env.SERVICE_NAMESPACE;
 const APPLICATION_ID = "iot_application:node_1";
 
+client.on('error', function(err) {
+    console.error(err);
+});
 
 client.monitor(function(err, res) {
     console.log("Entering monitoring mode.");
@@ -14,9 +17,9 @@ async function push(request) {
     // push on redis
     const xadd = promisify(client.xadd).bind(client);
     var id = await xadd (STREAMS_KEY, "*", 'request', request, function(err) {
-    if (err) {
-            console.log(err);
-            process.exit();
+        if (err) {
+                console.log(err);
+                process.exit();
         }
     });
     return id;
