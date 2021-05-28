@@ -1,12 +1,31 @@
+const redis = require("redis");
+
 class Worker {
-    constructor(redis_host, redis_port) {
-      this.redis_host = redis_host;
-      this.redis_port = redis_port;
+    constructor(redis_url) {
+      this.redis_url = redis_url;
+    }
+    init () {
+        
+        // create consumer group
+    }
+    run(){
+        //init connection
+        while (true) {
+            // read item
+            //process item
+            //ack message
+        } 
+    } 
+
+    get_item() {
+        //xread group
     }
 
-    run(){
-        
+    ack_item() {
+        //msg ack
     } 
+
+
 }
 
 let worker = new Worker('test', 'test');
