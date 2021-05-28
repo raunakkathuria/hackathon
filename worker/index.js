@@ -1,6 +1,5 @@
 const redis = require("redis");
 
-
 class Worker {
     constructor(redis_url, stream_name) {
       this.redis_url = redis_url;
@@ -35,5 +34,8 @@ class Worker {
 
 }
 
-let worker = new Worker('test', 'test');
+const REDIS_URL = process.env.REDIS_URL;
+const STREAM_NAME = process.env.SERVICE_NAMESPACE;
+
+let worker = new Worker(REDIS_URL, STREAM_NAME);
 worker.run();
