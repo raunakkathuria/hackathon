@@ -16,8 +16,8 @@ const server = http.createServer((req, res) => {
         res.statusCode = 400;
         response = createError(`The path ${pathname} does not accept the method ${method}.`);
     } else {
-        res.statusCode = 200;
-        response = routeConfig.handler(req);
+        response = routeConfig.handler(JSON.parse(req.data));
+        res.statusCode = response.error ? 400: 200;
     }
 
     res.end(JSON.stringify(response));

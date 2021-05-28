@@ -1,8 +1,10 @@
 const createError = require('../error').createError;
 const redisClient = require('../redis-helper');
 
-const validatePost = (req) => {
-
+const validatePost = (postInfo) => {
+    if (!(postInfo.title.trim())) {
+        return createError('The title field is missing and it is required.');
+    }
 };
 
 const createPost = (postInfo) => {
