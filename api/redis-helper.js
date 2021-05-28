@@ -26,7 +26,7 @@ await xgroup ("CREATE", STREAMS_KEY, APPLICATION_ID, '$', 'MKSTREAM' , function(
 async function push(request) {
     // push on redis
     const xadd = promisify(client.xadd).bind(client);
-    await xadd (STREAMS_KEY, "*", request);
+    await xadd (STREAMS_KEY, "*", 'request', request);
     return 1;
 }
 
