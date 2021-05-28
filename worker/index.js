@@ -3,12 +3,17 @@ const { promisify } = require("util");
 
 class Worker {
     constructor(redis_url, stream_name) {
-      this.redis = redis.createClient();
+      this.redis = redis.createClient(redis_url);
       this.stream_name = stream_name;
     }
     async init () {
         let afunc = promisify(this.redis.xgroup).bind(this.redis);
-        await afunc('CREATE', 'test', 'worker', '$', 'MKSTREAM');
+        // try {
+            await afunc('CREATE', this.stream_name, 'worker', '$', 'MKSTREAM');
+        // } catch  (err) {
+        //     console.log(err)
+        //     throw err;
+        // }
     }
     async run(){
         //init connection
