@@ -1,0 +1,24 @@
+{
+    "extends": "tslint-config-airbnb",
+    "rules": {
+        "quotemark": [
+            true,
+            "jsx-double"
+        ],
+        "trailing-comma": [
+            false
+        ],
+        "prefer-const": false,
+        "max-line-length": [false],
+        "object-literal-key-quotes": false,
+        "triple-equals": false,
+        "brace-style": false,
+        "ter-prefer-arrow-callback": false,
+        "object-shorthand-properties-first": false,
+        "variable-name": false,
+        "no-increment-decrement": false,
+        "object-curly-spacing": false,
+        "object-literal-shorthand": false,
+        "import-name": false
+    }
+}
