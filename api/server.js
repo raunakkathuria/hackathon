@@ -12,9 +12,6 @@ app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
 
 app.route('/post')
-.all((req, res, next) => {
-    res.json(createError('There was an error processing your request', err));
-})
 .post(async (req, res) => {
     response = await createPost(req.body);
     res.json(response);
@@ -22,11 +19,16 @@ app.route('/post')
 .get(async (req, res) => {
     response = await getPost(req.body.postId);
     res.json(response);
+})
+.all((req, res, next) => {
+    res.json(createError('There was an error processing your request', err));
 });
 
 // Error handler
 app.use((err, req, res, next) => {
-    res.json(createError('There was an error processing your request', err));
+    if (err) {
+        res.json(createError('There was an error processing your request', err));
+    }
 });
 
 app.listen(port, () => {
