@@ -28,19 +28,19 @@ services:
     command:
       sh -c 'npm i && node ./api/index.js'
 
-  worker:
-    build: ./
-    container_name: worker
-    volumes:
-      - ./:/var/www/app
-    environment:
-      - REDIS_URL=redis://cache
-      - SERVICE_NAMESPACE=deriv::hackathon
-      - NODE_ENV=development
-    networks:
-      - hackathon
-    command:
-      sh -c 'npm i && node ./worker/index.js'
+  # worker:
+  #   build: ./
+  #   container_name: worker
+  #   volumes:
+  #     - ./:/var/www/app
+  #   environment:
+  #     - REDIS_URL=redis://cache
+  #     - SERVICE_NAMESPACE=deriv::hackathon
+  #     - NODE_ENV=development
+  #   networks:
+  #     - hackathon
+  #   command:
+  #     sh -c 'npm i && node ./worker/index.js'
 
 volumes:
   cache-data:
