@@ -1,18 +1,32 @@
-const bodyParser  = require('body-parser');
-const express     = require('express');
-const config      = require('./config');
-const createError = require('./error').createError;
-const createPost  = require('./post/index').createPost;
+const bodyParser              = require('body-parser');
+const express                 = require('express');
+const config                  = require('./config');
+const createError             = require('./error').createError;
+const { createPost, getPost } = require('./post/index');
 
 const port = process.env.PORT || config.SERVER.PORT;
 
 const app = express();
 
+app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
 
-app.post('/post', async (req, res) => {
+app.route('/post')
+.all((req, res, next) => {
+    res.json(createError('There was an error processing your request', err));
+})
+.post(async (req, res) => {
     response = await createPost(req.body);
     res.json(response);
+})
+.get(async (req, res) => {
+    response = await getPost(req.body.postId);
+    res.json(response);
+});
+
+// Error handler
+app.use((err, req, res, next) => {
+    res.json(createError('There was an error processing your request', err));
 });
 
 app.listen(port, () => {

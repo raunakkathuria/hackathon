@@ -2,7 +2,6 @@
 const redis          = require('ioredis');
 const client         = new redis(process.env.REDIS_URL);
 const STREAMS_KEY    = process.env.SERVICE_NAMESPACE;
-const APPLICATION_ID = "iot_application:node_1";
 
 client.monitor((err, monitor) => {
     monitor.on("monitor", (time, args, source, database) => {
@@ -16,6 +15,13 @@ async function push(request) {
     return id;
 }
 
+async function get(request_id) {
+    // get the result of the request
+    var result = await client.hgetall(request_id);
+    return result;
+}
+
 module.exports = {
     push,
+    get,
 };
